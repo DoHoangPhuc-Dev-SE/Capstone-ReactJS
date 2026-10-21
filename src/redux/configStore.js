@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
+import productReducer from './productSlice';
 
 export const store = configureStore({
   reducer: {
-    // Tạm thời để trống, sau này tạo slice nào thì import bỏ vô đây
+    productSlice: productReducer, 
   },
 });

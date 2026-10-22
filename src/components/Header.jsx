@@ -1,43 +1,42 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function Header() {
+  const navigate = useNavigate();
+  const { cart } = useSelector(state => state.cartReducer);
+
+  // Tính tổng số lượng sản phẩm trong giỏ hàng
+  const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+
   return (
-    <header className="bg-black text-white">
-      {/* Top Bar: Logo & Navigation Right (Search, Cart, Login, Register) */}
-      <div className="container mx-auto flex justify-between items-center py-3 px-4">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-bold tracking-wider">
+    <header style={{ backgroundColor: '#000', color: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', fontFamily: 'Arial, sans-serif' }}>
+      {/* Top bar trên cùng */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333' }}>
+        <span 
+          style={{ cursor: 'pointer', fontWeight: 'bold', fontSize: '20px', letterSpacing: '1px', color: '#FACC15' }}
+          onClick={() => navigate('/')}
+        >
           CYBERLEARN
-        </Link>
-
-        {/* Right Action Menu */}
-        <div className="flex items-center space-x-6 text-sm">
-          <Link to="/search" className="flex items-center space-x-1 hover:text-gray-300">
-            <span>🔍</span>
-            <span>Search</span>
-          </Link>
-          
-          <Link to="/carts" className="flex items-center space-x-1 hover:text-gray-300">
-            <span>🛒</span>
-            <span>(0)</span>
-          </Link>
-
-          <Link to="/login" className="hover:text-gray-300">Login</Link>
-          <Link to="/register" className="hover:text-gray-300">Register</Link>
+        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', fontSize: '14px', fontWeight: '500' }}>
+          <NavLink to="/search" style={{ color: '#fff', textDecoration: 'none' }}>🔍 Search</NavLink>
+          <NavLink to="/carts" style={{ color: '#fff', textDecoration: 'none' }}>🛒 ({totalQuantity})</NavLink>
+          <NavLink to="/login" style={{ color: '#fff', textDecoration: 'none' }}>Login</NavLink>
+          <NavLink to="/register" style={{ color: '#fff', textDecoration: 'none' }}>Register</NavLink>
         </div>
       </div>
 
-      {/* Navigation Links Bar */}
-      <nav className="bg-gray-100 text-black border-t">
-        <div className="container mx-auto flex space-x-8 px-4 py-2 text-sm font-medium">
-          <NavLink to="/" className={({ isActive }) => isActive ? "border-b-2 border-black pb-1 font-bold" : "hover:text-gray-600"}>Home</NavLink>
-          <NavLink to="/men" className={({ isActive }) => isActive ? "border-b-2 border-black pb-1 font-bold" : "hover:text-gray-600"}>Men</NavLink>
-          <NavLink to="/woman" className={({ isActive }) => isActive ? "border-b-2 border-black pb-1 font-bold" : "hover:text-gray-600"}>Woman</NavLink>
-          <NavLink to="/kid" className={({ isActive }) => isActive ? "border-b-2 border-black pb-1 font-bold" : "hover:text-gray-600"}>Kid</NavLink>
-          <NavLink to="/sport" className={({ isActive }) => isActive ? "border-b-2 border-black pb-1 font-bold" : "hover:text-gray-600"}>Sport</NavLink>
-        </div>
-      </nav>
+      {/* Menu Navigation chính */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '12px 20px', display: 'flex', alignItems: 'center' }}>
+        <nav style={{ display: 'flex', gap: '32px', fontSize: '15px', fontWeight: '500' }}>
+          <NavLink to="/" style={{ color: '#FACC15', textDecoration: 'none', borderBottom: '2px solid #FACC15', paddingBottom: '4px' }}>Home</NavLink>
+          <NavLink to="/men" style={{ color: '#fff', textDecoration: 'none' }}>Men</NavLink>
+          <NavLink to="/woman" style={{ color: '#fff', textDecoration: 'none' }}>Woman</NavLink>
+          <NavLink to="/kid" style={{ color: '#fff', textDecoration: 'none' }}>Kid</NavLink>
+          <NavLink to="/sport" style={{ color: '#fff', textDecoration: 'none' }}>Sport</NavLink>
+        </nav>
+      </div>
     </header>
   );
 }

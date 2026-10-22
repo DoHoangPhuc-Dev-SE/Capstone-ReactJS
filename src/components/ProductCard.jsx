@@ -1,37 +1,158 @@
-import React from 'react';
+
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function ProductCard(props) {
-  const { product } = props;
+const IMAGE_BASE_URL = 'https://shop.cyberlearn.vn/images/';
+
+function getImageUrl(image) {
+  if (typeof image !== 'string') return '';
+
+  const value = image.trim();
+
+  if (
+    !value ||
+    ['string', 'null', 'undefined'].includes(value.toLowerCase()) ||
+    /\/images\/https?:\/\//i.test(value)
+  ) {
+    return '';
+  }
+
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      const url = new URL(value);
+
+      if (!/\.(png|jpe?g|webp|gif|avif)$/i.test(url.pathname)) {
+        return '';
+      }
+
+      return url.href;
+    } catch {
+      return '';
+    }
+  }
+
+  const fileName = value
+    .replace(/^\/+/, '')
+    .replace(/^images\//i, '');
+
+  if (!/\.(png|jpe?g|webp|gif|avif)$/i.test(fileName)) {
+    return '';
+  }
+
+  return `${IMAGE_BASE_URL}${fileName}`;
+}
+
+export default function ProductCard({ product }) {
   const navigate = useNavigate();
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (!product) return null;
+
+  const productName = product.name || 'Sản phẩm chưa có tên';
+  const imageUrl = getImageUrl(product.image);
+  const price = Number(product.price);
 
   return (
-    <div className="border rounded-lg p-4 shadow-sm bg-white flex flex-col justify-between hover:shadow-md transition">
+    <article
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%',
+        padding: '16px',
+        backgroundColor: '#fff',
+        border: '1px solid #e5e7eb',
+        borderRadius: '8px',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        boxSizing: 'border-box',
+      }}
+    >
       <div>
-        <img 
-          src={product.image} 
-          alt={product.name} 
-          className="w-full h-48 object-contain mb-4" 
-          onError={(e) => {
-            e.target.src = "https://i.imgur.com/391ZeHG.jpeg";
+        <div
+          style={{
+            width: '100%',
+            height: '180px',
+            marginBottom: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            backgroundColor: '#f9fafb',
           }}
-        />
-        <h3 className="font-bold text-lg truncate">{product.name}</h3>
-        <p className="text-gray-500 text-sm mb-2 line-clamp-2">{product.shortDescription}</p>
-      </div>
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-red-500 font-bold text-xl">{product.price}$</span>
+        >
+          {imageUrl && !imageFailed ? (
+            <img
+              src={imageUrl}
+              alt={productName}
+              loading="lazy"
+              onError={() => setImageFailed(true)}
+              style={{
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#6b7280',
+                fontSize: '14px',
+              }}
+            >
+              <span style={{ fontSize: '32px' }}>🖼️</span>
+              <span>No Image</span>
+            </div>
+          )}
         </div>
-        <div className="flex gap-2">
-          <button 
-            onClick={() => navigate(`/detail/${product.id}`)}
-            className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition font-medium"
-          >
-            Buy now
-          </button>
-        </div>
+
+        <h3 style={{ margin: '0 0 8px', fontSize: '18px' }}>
+          {productName}
+        </h3>
+
+        <p style={{ color: '#6b7280', fontSize: '14px' }}>
+          {product.shortDescription ||
+            product.description ||
+            'Chưa có mô tả.'}
+        </p>
       </div>
-    </div>
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '8px',
+          marginTop: '16px',
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => navigate(`/detail/${product.id}`)}
+          style={{
+            padding: '8px 12px',
+            border: 'none',
+            borderRadius: '4px',
+            backgroundColor: '#2563eb',
+            color: '#fff',
+            cursor: 'pointer',
+          }}
+        >
+          Buy now
+        </button>
+
+        <span style={{ fontWeight: 'bold' }}>
+          {Number.isFinite(price)
+            ? `${price.toLocaleString('vi-VN')}$`
+            : 'N/A'}
+        </span>
+      </div>
+    </article>
   );
 }

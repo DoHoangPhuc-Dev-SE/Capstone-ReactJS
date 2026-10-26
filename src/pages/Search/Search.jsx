@@ -9,7 +9,6 @@ import ProductCard from "../../components/ProductCard";
 export default function Search() {
   const dispatch = useDispatch();
 
-  // Lay danh sach san pham tu Redux
   const { arrProduct, loading, error } = useSelector(
   (state) => state.productReducer
 );
@@ -18,27 +17,22 @@ export default function Search() {
   const [categoryId, setCategoryId] = useState("all");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  // Luu danh sach Category va trang thai loc
   const [categories, setCategories] = useState([]);
   const [categoryLoading, setCategoryLoading] = useState(false);
   const [categoryError, setCategoryError] = useState("");
 
-  // Goi API lay san pham thong qua Redux
   useEffect(() => {
     if (arrProduct.length === 0) {
       dispatch(getProductApi());
     }
   }, [dispatch, arrProduct.length]);
 
-  // Lay danh sach Category
-  // Endpoint nay can doi chieu voi Swagger cua backend
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await http.get("/Product");
         const products = response.data?.content || [];
 
-        // Thu thap Category tu danh sach san pham
         const categoryMap = new Map();
 
         products.forEach((product) => {
@@ -58,13 +52,11 @@ export default function Search() {
     fetchCategories();
   }, []);
 
-  // Xu ly loc Category
   const handleCategoryChange = async (value) => {
     setCategoryId(value);
     setCategoryError("");
 
     if (value === "all") {
-      // Hien thi lai danh sach san pham goc tu Redux
       return;
     }
 
@@ -84,7 +76,6 @@ export default function Search() {
         throw new Error("API khong tra ve danh sach san pham hop le.");
       }
 
-      // Cap nhat danh sach tam thoi bang ket qua Category
       setCategoryProducts(data);
     } catch (err) {
       console.error("Loi loc Category:", err);
@@ -95,12 +86,10 @@ export default function Search() {
     }
   };
 
-  // null: dung danh sach Redux; array: dung ket qua loc Category
   const [categoryProducts, setCategoryProducts] = useState(null);
 
   const sourceProducts = categoryProducts ?? arrProduct;
 
-  // Tim kiem theo ten va sap xep gia bang Lodash
   const filteredProducts = useMemo(() => {
     const result = sourceProducts.filter((product) =>
       (product.name || "")

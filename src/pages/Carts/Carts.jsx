@@ -20,7 +20,7 @@ export default function Carts() {
   const userState = useSelector(state => state.userReducer || state.userSlice || { userProfile: null });
   const userProfile = userState?.userProfile;
 
-  // 1. Bảo mật: Chưa đăng nhập thì đá về /login
+  //Bảo mật: Chưa đăng nhập thì đá về /login
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token && !userProfile) {

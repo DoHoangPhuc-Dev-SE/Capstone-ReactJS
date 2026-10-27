@@ -47,10 +47,8 @@ export default function Detail() {
 
   return (
     <main className="container mx-auto px-4 py-8" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      {/* 2 Cột chính: Ảnh lớn bên trái - Thông tin chi tiết bên phải chuẩn Figma[cite: 34, 41] */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start' }}>
         
-        {/* Cột 1: Khung chứa ảnh sản phẩm */}
         <div className="bg-[#F8F8F8] border border-gray-200 rounded-lg p-8 flex items-center justify-center" style={{ backgroundColor: '#F8F8F8', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '40px', minHeight: '380px' }}>
           <img 
             src={product.image} 
@@ -59,7 +57,6 @@ export default function Detail() {
           />
         </div>
 
-        {/* Cột 2: Tên, Mô tả, Giá, Chọn Size và Nút Add to cart */}
         <div>
           <h1 className="text-3xl font-bold mb-4 text-gray-800" style={{ fontSize: '30px', fontWeight: 'bold', color: '#1F2937' }}>
             {product.name}
@@ -72,7 +69,6 @@ export default function Detail() {
             {product.price} $
           </div>
 
-          {/* Chọn Size[cite: 34, 41] */}
           <div className="mb-6">
             <span className="block font-semibold mb-2 text-gray-700" style={{ fontWeight: '600', marginBottom: '8px', color: '#374151' }}>
               Available Size:
@@ -99,7 +95,6 @@ export default function Detail() {
             </div>
           </div>
 
-          {/* Bộ tăng giảm số lượng & Nút Add to cart[cite: 34, 41] */}
           <div className="flex items-center gap-4 mb-6" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div className="flex items-center border border-gray-300 rounded overflow-hidden" style={{ display: 'flex', border: '1px solid #D1D5DB', borderRadius: '4px' }}>
               <button 
@@ -138,7 +133,6 @@ export default function Detail() {
         </div>
       </div>
 
-      {/* Phần Sản phẩm liên quan (Related Product)[cite: 34, 41] */}
       <div className="mt-16">
         <h2 className="text-2xl font-bold text-center mb-8 uppercase tracking-wide" style={{ fontSize: '24px', textAlign: 'center', margin: '40px 0 24px', fontWeight: 'bold' }}>
           - Related Product -

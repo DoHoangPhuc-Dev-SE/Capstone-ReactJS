@@ -5,7 +5,6 @@ export const http = axios.create({
   timeout: 30000,
 });
 
-// Tự động thêm Token vào Header nếu đã đăng nhập
 http.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
